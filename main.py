@@ -6,9 +6,16 @@ from dataclasses import dataclass
 from neo4j import GraphDatabase
 import google.generativeai as genai
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configure Gemini API
-genai.configure(api_key="")
+gemini_api_key = os.getenv('GEMINI_API_KEY')
+if not gemini_api_key:
+    raise ValueError("GEMINI_API_KEY environment variable is not set")
+genai.configure(api_key=gemini_api_key)
 
 
 @dataclass
@@ -345,10 +352,13 @@ class AgentThinkingKG:
 
     def __init__(self, neo4j_uri: str = None, neo4j_user: str = None,
                  neo4j_password: str = None):
-        # Use provided credentials or defaults
-        self.neo4j_uri = neo4j_uri or os.getenv('NEO4J_URI', 'bolt://localhost:7687')
-        self.neo4j_user = neo4j_user or os.getenv('NEO4J_USER', 'neo4j')
-        self.neo4j_password = neo4j_password or os.getenv('NEO4J_PASSWORD', 'admin456')
+        # Use provided credentials or environment variables
+        self.neo4j_uri = neo4j_uri or os.getenv('NEO4J_URI')
+        self.neo4j_user = neo4j_user or os.getenv('NEO4J_USER')
+        self.neo4j_password = neo4j_password or os.getenv('NEO4J_PASSWORD')
+        
+        if not all([self.neo4j_uri, self.neo4j_user, self.neo4j_password]):
+            raise ValueError("Neo4j credentials must be provided either through parameters or environment variables")
 
         self.analyzer = ThinkingAnalyzer()
         self.kg_builder = KnowledgeGraphBuilder(
