@@ -59,20 +59,25 @@ pip install -r requirements.txt
 
 ## Usage
 
-1. Start the Streamlit application:
+1. Run the server:
 ```bash
-streamlit run analyzer.py
+python3 server.py
 ```
 
-2. Open your browser and navigate to `http://localhost:8501`
+2. Run the frontend:
+```bash
+npm start
+```
 
-3. Use the chat interface to input reasoning processes for analysis
+3. Open your browser and navigate to localhost
+
+4. Use the chat interface to input reasoning processes for analysis
 
 ## Project Structure
 
 - `analyzer.py`: Main Streamlit application and visualization
 - `main.py`: Core reasoning analysis and knowledge graph functionality
-- `agents/deepseek.py`: Integration with Friendli API
+- `agents/deepseek.py`: Integration with Friendli API. Add your own inference if needed
 - `test_neo4j.py`: Neo4j connection testing
 
 ## Features in Detail
